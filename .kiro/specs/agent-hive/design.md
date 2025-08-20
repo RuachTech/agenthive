@@ -2,7 +2,7 @@
 
 ## Overview
 
-AgentHive is a unified multi-agent system built on LangGraph that provides dual operational modes: direct agent interaction and autonomous task orchestration. The system uses a single pool of specialized agent nodes that can be dynamically composed into either simple single-agent graphs or complex multi-agent orchestration workflows. The architecture supports multimodal input processing, multiple AI model backends, and deployment across various platforms.
+AgentHive is a unified multi-agent system built on LangGraph that provides dual operational modes: direct agent interaction and autonomous task orchestration. The system uses a single pool of specialized agent nodes that can be dynamically composed into either simple single-agent graphs or complex multi-agent orchestration workflows. The architecture supports multimodal input processing, multiple AI model backends, and deployment across various platforms. code is fully typed with annotations for easy maintenance.
 
 ## Architecture
 
