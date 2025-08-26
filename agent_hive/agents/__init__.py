@@ -8,16 +8,16 @@ from .factory import (
     AgentValidationError,
     AgentExecutionError,
     ErrorRecoveryStrategy,
-    get_agent_factory
+    get_agent_factory,
 )
 
 __all__ = [
     "AgentFactory",
-    "AgentNodeWrapper", 
+    "AgentNodeWrapper",
     "AgentCapabilities",
     "AgentError",
     "AgentValidationError",
     "AgentExecutionError",
     "ErrorRecoveryStrategy",
-    "get_agent_factory"
+    "get_agent_factory",
 ]

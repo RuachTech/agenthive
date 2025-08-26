@@ -1,0 +1,102 @@
+{
+  "mcpServers": {
+    "github-mcp": {
+      "command": "uvx",
+      "args": ["composio-github-mcp@latest"],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "timeout": 30,
+      "max_retries": 3,
+      "disabled": false,
+      "autoApprove": [
+        "list_issues",
+        "get_repository"
+      ],
+      "health_check_interval": 60
+    },
+    "linear-mcp": {
+      "command": "uvx",
+      "args": ["composio-linear-mcp@latest"],
+      "env": {
+        "LINEAR_API_KEY": "${LINEAR_API_KEY}",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "timeout": 30,
+      "max_retries": 3,
+      "disabled": false,
+      "autoApprove": [
+        "list_issues",
+        "get_issue"
+      ]
+    },
+    "slack-mcp": {
+      "command": "uvx",
+      "args": ["composio-slack-mcp@latest"],
+      "env": {
+        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+        "SLACK_USER_TOKEN": "${SLACK_USER_TOKEN}",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "timeout": 45,
+      "max_retries": 2,
+      "disabled": false,
+      "autoApprove": []
+    },
+    "notion-mcp": {
+      "command": "uvx",
+      "args": ["composio-notion-mcp@latest"],
+      "env": {
+        "NOTION_TOKEN": "${NOTION_TOKEN}",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "timeout": 30,
+      "max_retries": 3,
+      "disabled": false,
+      "autoApprove": [
+        "search_pages"
+      ]
+    },
+    "figma-mcp": {
+      "command": "uvx",
+      "args": ["composio-figma-mcp@latest"],
+      "env": {
+        "FIGMA_TOKEN": "${FIGMA_TOKEN}",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "timeout": 30,
+      "max_retries": 3,
+      "disabled": false,
+      "autoApprove": [
+        "get_file"
+      ]
+    },
+    "aws-mcp": {
+      "command": "uvx",
+      "args": ["composio-aws-mcp@latest"],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "${AWS_ACCESS_KEY_ID}",
+        "AWS_SECRET_ACCESS_KEY": "${AWS_SECRET_ACCESS_KEY}",
+        "AWS_DEFAULT_REGION": "${AWS_DEFAULT_REGION}",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "timeout": 60,
+      "max_retries": 2,
+      "disabled": true,
+      "autoApprove": []
+    },
+    "browserbase-mcp": {
+      "command": "uvx",
+      "args": ["composio-browserbase-mcp@latest"],
+      "env": {
+        "BROWSERBASE_API_KEY": "${BROWSERBASE_API_KEY}",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "timeout": 120,
+      "max_retries": 1,
+      "disabled": true,
+      "autoApprove": []
+    }
+  }
+}

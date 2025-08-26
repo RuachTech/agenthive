@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 class ModelProvider(Enum):
     """Supported model providers."""
+
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     GOOGLE = "google"
@@ -25,6 +26,7 @@ class ModelProvider(Enum):
 @dataclass
 class ModelResponse:
     """Normalized model response structure."""
+
     content: str
     provider: str
     model_name: str
@@ -36,6 +38,7 @@ class ModelResponse:
 @dataclass
 class ModelConfig:
     """Configuration for model instances."""
+
     provider: ModelProvider
     model_name: str
     api_key: str
@@ -48,30 +51,26 @@ class ModelConfig:
 
 class ModelInterface(ABC):
     """Abstract interface for all model providers."""
-    
+
     def __init__(self, config: ModelConfig) -> None:
         self.config = config
         self.provider = config.provider.value
         self.model_name = config.model_name
-        
+
     @abstractmethod
     async def generate(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> ModelResponse:
         """Generate a response from the model."""
         pass
-    
+
     @abstractmethod
     def stream_generate(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> AsyncIterator[str]:
         """Stream generate responses from the model."""
         pass
-    
+
     @abstractmethod
     async def is_available(self) -> bool:
         """Check if the model is currently available."""
@@ -80,7 +79,7 @@ class ModelInterface(ABC):
 
 class OpenAIModel(ModelInterface):
     """OpenAI model implementation."""
-    
+
     def __init__(self, config: ModelConfig) -> None:
         super().__init__(config)
         self.client = ChatOpenAI(
@@ -89,48 +88,42 @@ class OpenAIModel(ModelInterface):
             temperature=config.temperature,
             timeout=config.timeout,
             max_retries=config.max_retries,
-            **(config.additional_params or {})
+            **(config.additional_params or {}),
         )
-    
+
     async def generate(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> ModelResponse:
         """Generate response using OpenAI."""
         try:
             response = await self.client.ainvoke(messages, **kwargs)
-            
+
             # Handle content that might be string or list
             content = response.content
             if isinstance(content, list):
                 # Convert list content to string
                 content = "".join(str(item) for item in content)
-            
+
             return ModelResponse(
                 content=str(content),
                 provider=self.provider,
                 model_name=self.model_name,
-                usage=getattr(response, 'usage_metadata', None),
-                metadata=getattr(response, 'response_metadata', None),
-                finish_reason=getattr(response, 'finish_reason', None)
+                usage=getattr(response, "usage_metadata", None),
+                metadata=getattr(response, "response_metadata", None),
+                finish_reason=getattr(response, "finish_reason", None),
             )
         except Exception as e:
             logger.error(f"OpenAI generation failed: {e}")
             raise
-    
+
     def stream_generate(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> AsyncIterator[str]:
         """Stream generate using OpenAI."""
         return self._stream_impl(messages, **kwargs)
-    
+
     async def _stream_impl(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> AsyncIterator[str]:
         """Internal streaming implementation."""
         try:
@@ -144,15 +137,12 @@ class OpenAIModel(ModelInterface):
         except Exception as e:
             logger.error(f"OpenAI streaming failed: {e}")
             raise
-    
+
     async def is_available(self) -> bool:
         """Check OpenAI availability."""
         try:
             test_messages = [HumanMessage(content="test")]
-            await asyncio.wait_for(
-                self.client.ainvoke(test_messages), 
-                timeout=5.0
-            )
+            await asyncio.wait_for(self.client.ainvoke(test_messages), timeout=5.0)
             return True
         except Exception:
             return False
@@ -160,7 +150,7 @@ class OpenAIModel(ModelInterface):
 
 class AnthropicModel(ModelInterface):
     """Anthropic model implementation."""
-    
+
     def __init__(self, config: ModelConfig) -> None:
         super().__init__(config)
         self.client = ChatAnthropic(
@@ -170,48 +160,42 @@ class AnthropicModel(ModelInterface):
             max_tokens_to_sample=config.max_tokens,
             timeout=config.timeout,
             max_retries=config.max_retries,
-            **(config.additional_params or {})
+            **(config.additional_params or {}),
         )
-    
+
     async def generate(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> ModelResponse:
         """Generate response using Anthropic."""
         try:
             response = await self.client.ainvoke(messages, **kwargs)
-            
+
             # Handle content that might be string or list
             content = response.content
             if isinstance(content, list):
                 # Convert list content to string
                 content = "".join(str(item) for item in content)
-            
+
             return ModelResponse(
                 content=str(content),
                 provider=self.provider,
                 model_name=self.model_name,
-                usage=getattr(response, 'usage_metadata', None),
-                metadata=getattr(response, 'response_metadata', None),
-                finish_reason=getattr(response, 'finish_reason', None)
+                usage=getattr(response, "usage_metadata", None),
+                metadata=getattr(response, "response_metadata", None),
+                finish_reason=getattr(response, "finish_reason", None),
             )
         except Exception as e:
             logger.error(f"Anthropic generation failed: {e}")
             raise
-    
+
     def stream_generate(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> AsyncIterator[str]:
         """Stream generate using Anthropic."""
         return self._stream_impl(messages, **kwargs)
-    
+
     async def _stream_impl(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> AsyncIterator[str]:
         """Internal streaming implementation."""
         try:
@@ -225,15 +209,12 @@ class AnthropicModel(ModelInterface):
         except Exception as e:
             logger.error(f"Anthropic streaming failed: {e}")
             raise
-    
+
     async def is_available(self) -> bool:
         """Check Anthropic availability."""
         try:
             test_messages = [HumanMessage(content="test")]
-            await asyncio.wait_for(
-                self.client.ainvoke(test_messages), 
-                timeout=5.0
-            )
+            await asyncio.wait_for(self.client.ainvoke(test_messages), timeout=5.0)
             return True
         except Exception:
             return False
@@ -241,7 +222,7 @@ class AnthropicModel(ModelInterface):
 
 class GoogleModel(ModelInterface):
     """Google model implementation."""
-    
+
     def __init__(self, config: ModelConfig) -> None:
         super().__init__(config)
         self.client = ChatGoogleGenerativeAI(
@@ -251,48 +232,42 @@ class GoogleModel(ModelInterface):
             max_output_tokens=config.max_tokens,
             timeout=config.timeout,
             max_retries=config.max_retries,
-            **(config.additional_params or {})
+            **(config.additional_params or {}),
         )
-    
+
     async def generate(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> ModelResponse:
         """Generate response using Google."""
         try:
             response = await self.client.ainvoke(messages, **kwargs)
-            
+
             # Handle content that might be string or list
             content = response.content
             if isinstance(content, list):
                 # Convert list content to string
                 content = "".join(str(item) for item in content)
-            
+
             return ModelResponse(
                 content=str(content),
                 provider=self.provider,
                 model_name=self.model_name,
-                usage=getattr(response, 'usage_metadata', None),
-                metadata=getattr(response, 'response_metadata', None),
-                finish_reason=getattr(response, 'finish_reason', None)
+                usage=getattr(response, "usage_metadata", None),
+                metadata=getattr(response, "response_metadata", None),
+                finish_reason=getattr(response, "finish_reason", None),
             )
         except Exception as e:
             logger.error(f"Google generation failed: {e}")
             raise
-    
+
     def stream_generate(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> AsyncIterator[str]:
         """Stream generate using Google."""
         return self._stream_impl(messages, **kwargs)
-    
+
     async def _stream_impl(
-        self, 
-        messages: Sequence[BaseMessage], 
-        **kwargs: Any
+        self, messages: Sequence[BaseMessage], **kwargs: Any
     ) -> AsyncIterator[str]:
         """Internal streaming implementation."""
         try:
@@ -306,15 +281,12 @@ class GoogleModel(ModelInterface):
         except Exception as e:
             logger.error(f"Google streaming failed: {e}")
             raise
-    
+
     async def is_available(self) -> bool:
         """Check Google availability."""
         try:
             test_messages = [HumanMessage(content="test")]
-            await asyncio.wait_for(
-                self.client.ainvoke(test_messages), 
-                timeout=5.0
-            )
+            await asyncio.wait_for(self.client.ainvoke(test_messages), timeout=5.0)
             return True
         except Exception:
             return False
@@ -322,22 +294,19 @@ class GoogleModel(ModelInterface):
 
 class ModelFactory:
     """Factory for creating model instances with fallback support."""
-    
+
     def __init__(self) -> None:
         self._model_configs: Dict[str, ModelConfig] = {}
         self._model_instances: Dict[str, ModelInterface] = {}
         self._fallback_chains: Dict[str, List[str]] = {}
-    
+
     def register_model(
-        self, 
-        name: str, 
-        config: ModelConfig, 
-        fallbacks: Optional[List[str]] = None
+        self, name: str, config: ModelConfig, fallbacks: Optional[List[str]] = None
     ) -> None:
         """Register a model configuration with optional fallbacks."""
         self._model_configs[name] = config
         self._fallback_chains[name] = fallbacks or []
-        
+
         # Create model instance
         if config.provider == ModelProvider.OPENAI:
             self._model_instances[name] = OpenAIModel(config)
@@ -347,18 +316,18 @@ class ModelFactory:
             self._model_instances[name] = GoogleModel(config)
         else:
             raise ValueError(f"Unsupported provider: {config.provider}")
-    
+
     async def get_model(self, name: str) -> ModelInterface:
         """Get a model instance, with fallback if primary is unavailable."""
         if name not in self._model_instances:
             raise ValueError(f"Model '{name}' not registered")
-        
+
         primary_model = self._model_instances[name]
-        
+
         # Check if primary model is available
         if await primary_model.is_available():
             return primary_model
-        
+
         # Try fallbacks
         for fallback_name in self._fallback_chains.get(name, []):
             if fallback_name in self._model_instances:
@@ -368,15 +337,15 @@ class ModelFactory:
                         f"Primary model '{name}' unavailable, using fallback '{fallback_name}'"
                     )
                     return fallback_model
-        
+
         # If no fallbacks work, return primary (will fail on use)
         logger.error(f"Model '{name}' and all fallbacks unavailable")
         return primary_model
-    
+
     def list_models(self) -> List[str]:
         """List all registered model names."""
         return list(self._model_instances.keys())
-    
+
     async def check_all_models(self) -> Dict[str, bool]:
         """Check availability of all registered models."""
         results = {}
