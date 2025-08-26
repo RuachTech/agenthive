@@ -1,14 +1,12 @@
 """Tests for Composio SDK integration."""
 
 import pytest
-import pytest_asyncio
 from unittest.mock import Mock, AsyncMock, patch
-from typing import Dict, Any
 
 from agent_hive.integrations import (
     ComposioSDKClient, ComposioAgentIntegration, ComposioTool, ComposioConnection,
     ComposioExecutionResult, ComposioIntegrationError, ComposioNotAvailableError,
-    ComposioAuthenticationError, ComposioToolExecutionError, COMPOSIO_AVAILABLE
+    ComposioAuthenticationError, COMPOSIO_AVAILABLE
 )
 
 

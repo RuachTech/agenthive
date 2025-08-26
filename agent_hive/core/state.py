@@ -1,6 +1,6 @@
 """Core state management for AgentHive."""
 
-from typing import TypedDict, Annotated, List, Dict, Any, Optional
+from typing import TypedDict, Annotated, Any, Optional
 import operator
 from datetime import datetime
 from langchain_core.messages import BaseMessage
@@ -13,22 +13,22 @@ class AgentState(TypedDict):
     task: str
 
     # Conversation history with automatic message aggregation
-    messages: Annotated[List[BaseMessage], operator.add]
+    messages: Annotated[list[BaseMessage], operator.add]
 
     # Next agent to route to in orchestration mode
     next: str
 
     # Agent working memory for intermediate results and context
-    scratchpad: Dict[str, Any]
+    scratchpad: dict[str, Any]
 
     # Operating mode: "direct" or "orchestration"
     mode: str
 
-    # List of currently involved agents
-    active_agents: List[str]
+    # list of currently involved agents
+    active_agents: list[str]
 
     # Processed files and media content
-    multimodal_content: Dict[str, Any]
+    multimodal_content: dict[str, Any]
 
     # Unique session identifier
     session_id: str
@@ -40,7 +40,7 @@ class AgentState(TypedDict):
     last_updated: Optional[datetime]
 
     # Error tracking and recovery information
-    errors: List[Dict[str, Any]]
+    errors: list[dict[str, Any]]
 
     # Task completion status and progress tracking
-    task_status: Dict[str, Any]
+    task_status: dict[str, Any]

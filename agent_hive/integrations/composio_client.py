@@ -156,7 +156,6 @@ class ComposioMCPClient:
 
         # Find the tool and its server
         target_server = None
-        target_tool = None
 
         if server_name:
             # Use specific server
@@ -171,7 +170,6 @@ class ComposioMCPClient:
                 for tool in tools:
                     if tool.name == tool_name:
                         target_server = self.servers[server_name]
-                        target_tool = tool
                         break
                 if target_server:
                     break

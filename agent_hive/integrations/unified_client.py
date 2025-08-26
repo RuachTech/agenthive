@@ -2,15 +2,14 @@
 
 import asyncio
 import logging
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum
 
 from .composio_client import ComposioMCPClient
-from .mcp import MCPTool, MCPExecutionResult, MCPError
 from .composio_sdk import (
-    ComposioSDKClient, ComposioAgentIntegration, ComposioTool, 
-    ComposioExecutionResult, ComposioIntegrationError, COMPOSIO_AVAILABLE
+    ComposioSDKClient, ComposioAgentIntegration,
+    ComposioIntegrationError, COMPOSIO_AVAILABLE
 )
 
 logger = logging.getLogger(__name__)

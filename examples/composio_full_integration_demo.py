@@ -13,15 +13,15 @@ This demo shows:
 import asyncio
 import logging
 import os
-from typing import Dict, Any
+# from typing import Dict, Any
 
 from agent_hive.integrations import (
     # MCP Integration
-    ComposioMCPClient, get_mcp_client,
+    get_mcp_client,
     # Composio SDK Integration  
-    ComposioSDKClient, ComposioAgentIntegration, get_composio_client, COMPOSIO_AVAILABLE,
+    ComposioAgentIntegration, get_composio_client, COMPOSIO_AVAILABLE,
     # Unified Integration
-    UnifiedIntegrationClient, IntegrationMode, get_unified_client
+    UnifiedIntegrationClient, IntegrationMode
 )
 
 # Configure logging

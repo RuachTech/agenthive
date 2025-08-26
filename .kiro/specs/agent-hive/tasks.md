@@ -32,7 +32,7 @@
   - Write integration tests for MCP tool execution with mock Composio responses
   - _Requirements: 6.2, 6.3_
 
-- [ ] 5. Implement single-agent graph factory
+- [x] 5. Implement single-agent graph factory
   - Create create_direct_chat_graph function that builds simple single-node workflows
   - Add graph compilation and validation for direct interaction mode
   - Implement session management for direct chat conversations
