@@ -1,4 +1,4 @@
-# AgentHive
+# AgentHive [under active development]
 
 Unified multi-agent system built on LangGraph that provides both direct interaction with specialized AI agents and autonomous task delegation to a coordinated team of agents.
 
