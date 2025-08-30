@@ -464,15 +464,17 @@ class ComposioMCPServer(MCPServerInterface):
                 "state": "open",
             }
         elif tool_name == "list_issues":
-            return [
-                {
-                    "id": 1,
-                    "number": 1,
-                    "title": "Sample Issue",
-                    "state": "open",
-                    "html_url": "https://github.com/user/repo/issues/1",
-                }
-            ]
+            return {
+                "issues": [
+                    {
+                        "id": 1,
+                        "number": 1,
+                        "title": "Sample Issue",
+                        "state": "open",
+                        "html_url": "https://github.com/user/repo/issues/1",
+                    }
+                ]
+            }
         return {"status": "success"}
 
     def _mock_linear_response(

@@ -422,7 +422,7 @@ class TestAgentFactory:
             }
 
             config_file = config_dir / "test_agent.json"
-            with open(config_file, "w") as f:
+            with open(config_file, "w", encoding="utf-8") as f:
                 json.dump(config_data, f)
 
             factory.load_agent_configurations(config_dir)
@@ -439,7 +439,7 @@ class TestAgentFactory:
 
             # Create invalid JSON file
             invalid_file = config_dir / "invalid.json"
-            with open(invalid_file, "w") as f:
+            with open(invalid_file, "w", encoding="utf-8") as f:
                 f.write("invalid json content")
 
             # Should not raise exception, just log error

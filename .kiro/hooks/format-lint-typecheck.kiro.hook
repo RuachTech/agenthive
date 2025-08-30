@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "Format, Lint & Type Check",
+  "description": "Automatically runs make format and make lint after every task completion, then fixes any pending mypy type issues",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.py",
+      "pyproject.toml"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Run `make format` and `make lint` to format and lint the code. Then run mypy type checking and fix any type issues that are found. Focus on resolving type annotations, import issues, and ensuring all functions have proper type hints."
+  }
+}

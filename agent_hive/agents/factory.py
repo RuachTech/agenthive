@@ -404,7 +404,7 @@ class AgentFactory:
 
         for config_file in config_dir.glob("*.json"):
             try:
-                with open(config_file, "r", encoding="utf-8") as f:
+                with open(config_file, encoding="utf-8") as f:
                     config_data = json.load(f)
 
                 # Parse agent config
