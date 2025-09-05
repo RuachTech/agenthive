@@ -10,7 +10,7 @@ def verify_imports():
     try:
         from agent_hive.core.state import AgentState  # noqa: F401
         from agent_hive.core.config import AgentConfig, SystemConfig  # noqa: F401
-        from agent_hive.api.main import app  # noqa: F401
+        from agent_hive.api import app  # noqa: F401
 
         print("✓ All core imports successful")
         return True
@@ -98,7 +98,7 @@ def verify_fastapi_app():
     """Verify FastAPI app can be created and basic endpoints work."""
     try:
         from fastapi.testclient import TestClient
-        from agent_hive.api.main import app
+        from agent_hive.api import app
 
         client = TestClient(app)
 

@@ -4,7 +4,7 @@ import uvicorn
 import os
 from dotenv import load_dotenv
 
-from agent_hive.api.main import app
+from agent_hive.api import app
 from agent_hive.core.config import SystemConfig
 
 # Load environment variables

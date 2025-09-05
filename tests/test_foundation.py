@@ -4,7 +4,7 @@ import pytest
 from fastapi.testclient import TestClient
 from datetime import datetime
 
-from agent_hive.api.main import app
+from agent_hive.api import app
 from agent_hive.core.state import AgentState
 from agent_hive.core.config import AgentConfig, SystemConfig
 
