@@ -55,6 +55,9 @@ class SessionService:
                     field="active_agent",
                 )
 
+            if self.api.state_manager is None:
+                raise ServiceUnavailableError("state_manager", "State manager not initialized")
+            
             session = self.api.state_manager.create_session(
                 user_id=user_id, mode=mode, active_agent=active_agent
             )
@@ -97,6 +100,9 @@ class SessionService:
                 raise ValidationError("Session ID is required", field="session_id")
             session_id = validated_session_id
 
+            if self.api.state_manager is None:
+                raise ServiceUnavailableError("state_manager", "State manager not initialized")
+            
             success = self.api.state_manager.delete_session(session_id)
 
             if success:
@@ -140,6 +146,9 @@ class SessionService:
             # Validate user ID
             user_id = RequestValidator.validate_user_id(user_id)
 
+            if self.api.state_manager is None:
+                raise ServiceUnavailableError("state_manager", "State manager not initialized")
+            
             session_ids = self.api.state_manager.get_user_sessions(user_id)
             sessions = []
 
@@ -194,6 +203,9 @@ class SessionService:
                 raise ValidationError("Session ID is required", field="session_id")
             session_id = validated_session_id
 
+            if self.api.state_manager is None:
+                raise ServiceUnavailableError("state_manager", "State manager not initialized")
+            
             session = self.api.state_manager.get_session(session_id)
 
             if not session:
@@ -220,7 +232,7 @@ class SessionService:
                     {
                         "file_id": f.file_id,
                         "original_name": f.original_name,
-                        "file_type": f.file_type.value,
+                        "file_type": f.file_type.value if hasattr(f.file_type, 'value') else str(f.file_type),
                         "processing_timestamp": f.processing_timestamp.isoformat(),
                     }
                     for f in session.multimodal_files
@@ -251,6 +263,9 @@ class SessionService:
             Cleanup result
         """
         try:
+            if self.api.state_manager is None:
+                raise ServiceUnavailableError("state_manager", "State manager not initialized")
+            
             cleaned_count = self.api.state_manager.cleanup_expired_sessions()
 
             cleanup_data = {

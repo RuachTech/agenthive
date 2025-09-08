@@ -41,8 +41,12 @@ class HealthService:
             model_status = await self.api.model_factory.check_all_models()
 
             # Check agent availability
-            available_agents = await self.api.graph_factory.get_available_agents()
-            healthy_agents = sum(1 for agent in available_agents if agent["available"])
+            if self.api.graph_factory is None:
+                available_agents = []
+                healthy_agents = 0
+            else:
+                available_agents = await self.api.graph_factory.get_available_agents()
+                healthy_agents = sum(1 for agent in available_agents if agent["available"])
 
             health_status = {
                 "status": "healthy",
